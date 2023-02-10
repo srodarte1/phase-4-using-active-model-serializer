@@ -8,8 +8,23 @@ class MoviesController < ApplicationController
 
   def show
     movie = Movie.find(params[:id])
-    render json: movie
+  #  byebug
+    if request.url == "http://localhost:3000/movies/#{params[:id]}"
+
+    render json: movie, status: 200
+    else 
+      render json: movie, serializer: MovieSummarySerializerSerializer, status: 200
+    end
   end
+  # def summary
+  #   movie = Movie.find(params[:id])
+  #   render json: movie, serializer: MovieSummarySerializerSerializer, status: 200
+  # end
+  def summaries 
+    movies = Movie.all
+    render json: movies, each_serializer: MovieSummarySerializerSerializer, status: 200
+  end
+
 
   private
 
